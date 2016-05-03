@@ -1,5 +1,15 @@
 package application;
-	
+
+/*
+ * Release 1.0.0.
+ * 
+ * HTML Website Builder
+ * 
+ * Just add the components you want and hit create! Your beautiful website will display within seconds!
+ * Now with Open and Save capabilities to save your work!
+ * 
+ */
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;

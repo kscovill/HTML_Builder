@@ -1,41 +1,31 @@
 package application;
 
+/*
+ * Release 1.0.0.
+ * 
+ * HTML Website Builder
+ * 
+ * Just add the components you want and hit create! Your beautiful website will display within seconds!
+ * Now with Open and Save capabilities to save your work!
+ * 
+ */
+
 import java.awt.AWTException;
 import java.awt.Desktop;
 import java.awt.Robot;
-import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.CopyOption;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Scanner;
-import java.awt.datatransfer.*;
-import java.awt.Toolkit;
 import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileFilter;
-import javafx.concurrent.Worker.State;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
-import javafx.stage.Stage;
 import javafx.scene.control.*;
 
 public class builderController {
@@ -109,18 +99,28 @@ public class builderController {
 	}
 	
 	//When Open is clicked, Reads File, Inputs data. 
+	@FXML
 	private void onOpen() throws FileNotFoundException{
+		
 		JFileChooser chooser = new JFileChooser();
 		chooser.showOpenDialog(null);
+		
 		if(chooser.getSelectedFile() == null){
 			return;
 		}
+		String b = "";
 		File file = new File(chooser.getSelectedFile().toString());
 		Scanner sc = new Scanner(file);
-		String b = sc.nextLine().toString();
+		
+		
+		if(sc.hasNextLine()){
+			b = sc.nextLine().toString();
+		}
 		if(b.equals("START")){
-			for(int i = 0; i<11; i++)
+			int i = -1;
+			while(sc.hasNextLine())
 			{
+				i += 1;
 				boolean isTrue = false;
 				String str = sc.nextLine();
 				if (str.equals("true")){
@@ -151,10 +151,18 @@ public class builderController {
 					}
 					break;
 				case 3:
-					panel.setValue(Color.valueOf(str));
+					try{
+						panel.setValue(Color.valueOf(str));
+					}catch(IllegalArgumentException e){
+						panel.setValue(Color.valueOf("#ffffff"));
+					}
 					break;
 				case 4:
-					background.setValue(Color.valueOf(str));
+					try{
+						background.setValue(Color.valueOf(str));
+					}catch(IllegalArgumentException e){
+						panel.setValue(Color.valueOf("#ffffff"));
+					}
 					break;
 				case 5:
 					BackgroundImage.setText(str);
@@ -163,10 +171,18 @@ public class builderController {
 					buttonPressed = isTrue;
 					break;
 				case 7:
-					footerColor.setValue(Color.valueOf(str));
+					try{
+						footerColor.setValue(Color.valueOf(str));
+					}catch(IllegalArgumentException e){
+						panel.setValue(Color.valueOf("#ffffff"));
+					}
 					break;
 				case 8:
-					font.setValue(Color.valueOf(str));
+					try{
+						font.setValue(Color.valueOf(str));
+					}catch(IllegalArgumentException e){
+						panel.setValue(Color.valueOf("#ffffff"));
+					}
 					break;
 				case 9:
 					Footer.setText(str);
@@ -185,11 +201,15 @@ public class builderController {
 					}
 					Area.setText(all);
 					break;
+				default: 
+					break;
 				}
 			}
 		}else{
+			sc.close();
 			return;
 		}
+		sc.close();
 	}
 	
 	//When Save is Clicked, prints all fields to a file. 
@@ -373,7 +393,7 @@ public class builderController {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooser.showDialog(null, "Select");
-		direc = chooser.getSelectedFile().toString();
+		
 		
 		if (chooser.getSelectedFile() == null) {
 			return;
@@ -381,7 +401,7 @@ public class builderController {
 		else{
 			file = new File(chooser.getSelectedFile().toString()+"\\index.html");
 		}
-		
+		direc = chooser.getSelectedFile().toString();
 		writeToFile(file);
 		
 		String url = direc + "\\index.html";
@@ -478,7 +498,7 @@ public class builderController {
 		print.println("#wrap{");
 		print.println("	padding: 15px;");
 		print.println("	word-wrap: break-word;");
-		print.println("	height:1000px;");
+		print.println("	height:auto;\n min-height:1000px;");
 		print.println("	width:" + "1000px" + ";");
 		print.println("	margin:auto;");
 		print.println("	background-color:" + "#" +  panel.getValue().toString().substring(2, 8) + ";");
